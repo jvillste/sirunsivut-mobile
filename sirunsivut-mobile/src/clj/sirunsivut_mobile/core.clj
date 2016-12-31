@@ -1,0 +1,2 @@
+(ns sirunsivut-mobile.core
+)
