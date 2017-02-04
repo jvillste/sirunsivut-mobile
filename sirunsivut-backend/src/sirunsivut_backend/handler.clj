@@ -6,11 +6,10 @@
 
 
 (defn app []
-  (apply compojure/routes
-         (concat (cor-api/api-routes "/api"
-                                     {}
-                                     'sirunsivut-backend.api)
-                 [(route/resources "/")
-                  (route/not-found "Not Found")])))
+  (-> (cor-api/app {}
+                   'sirunsivut-backend.api)
+      (cor-api/wrap-cors [#"http://localhost:8000"
+                          #"http://sirpakauppinen.fi"]
+                         [:post])))
 
 

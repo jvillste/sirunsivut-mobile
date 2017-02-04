@@ -31,12 +31,17 @@
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
   
   :cljsbuild {:builds [{:id "dev"
-                        :source-paths ["src/cljs"]
+                        :source-paths ["src/cljs"
+                                       "checkouts/cor/src"
+                                       "settings/dev"]
                         :figwheel {:on-jsload "sirunsivut-mobile.core/main"}
                         :compiler {:main sirunsivut-mobile.core
-                                   :output-to "../sirunsivut-backend/resources/public/js/compiled/app.js"
-                                   :output-dir "../sirunsivut-backend/resources/public/js/compiled/out"
-                                   :asset-path "js/compiled/out"
+                                   ;; :output-to "../sirunsivut-backend/resources/public/js/compiled/app.js"
+                                   :output-to "../sirunsivut/sites/all/themes/siru/javascript/compiled/app.js"
+                                   ;; :output-dir "../sirunsivut-backend/resources/public/js/compiled/out"
+                                   :output-dir "../sirunsivut/sites/all/themes/siru/javascript/compiled/out"
+                                   ;; :asset-path "js/compiled/out"
+                                   :asset-path "/sites/all/themes/siru/javascript/compiled/out"
                                    :source-map-timestamp true}}
 
                        {:id "min"

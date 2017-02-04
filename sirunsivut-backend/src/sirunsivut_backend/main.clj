@@ -14,6 +14,7 @@
 
 (def server (atom nil))
 
+
 (defn start []
   (timbre/info "starting")
   (when @server (@server))
