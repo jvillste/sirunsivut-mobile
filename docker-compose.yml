@@ -31,9 +31,10 @@ services:
 # #      - d4d-unison-sync:/var/www/html:rw # Replace volume to this to use docker-sync for macOS users
 
   web:
-      image: iiiepe/apache-drupal6
+#      image: iiiepe/apache-drupal6
+      image: sirunsivut/apache-drupal6
       volumes:
-        - ./sirunsivut:/var/www
+         - ./sirunsivut:/var/www
 #        - logs:/var/log/supervisor
       ports:
         - "8000:80"

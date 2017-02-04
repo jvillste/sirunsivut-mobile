@@ -8,7 +8,8 @@
                  [reagent "0.5.1"]
                  [org.clojure/core.async "0.2.374"]
                  [secretary "1.2.3"]
-                 [cor "0.1.0-SNAPSHOT"]]
+                 [cor "0.1.0-SNAPSHOT"]
+                 [com.andrewmcveigh/cljs-time "0.4.0"]]
 
   :min-lein-version "2.5.3"
 
