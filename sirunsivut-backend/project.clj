@@ -14,5 +14,6 @@
                  #_[com.taoensso/timbre "4.7.2"]
                  [com.taoensso/timbre "4.5.1"]
                  #_[ring-cors "0.1.8"]
+                 [jumblerg/ring.middleware.cors "1.0.1"]
                  [cor "0.1.0-SNAPSHOT"]]
-    :jvm-opts ["-Xmx100m"])
+  :jvm-opts ["-Xmx100m"])

@@ -12,12 +12,11 @@
 
 ;; development
 
-(def server (atom nil))
-
+(defonce server (atom nil))
 
 (defn start []
   (timbre/info "starting")
   (when @server (@server))
-  (.start (Thread. (fn [] (reset! server
-                                  (http-kit/run-server (handler/app)
-                                                       {:port 3002}))))))
+  (reset! server
+          (http-kit/run-server (handler/app)
+                               {:port 3002})))

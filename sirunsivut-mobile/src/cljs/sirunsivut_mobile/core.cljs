@@ -25,17 +25,24 @@
 
 (defn teaser-list [state]
   [:div
-   (for [teaser (take 40 (:teasers state))]
-     [:div {:key (:nid teaser) :style {:clear "both" :margin-top "15px"}}
-      [:div {:class [:page_list_date]}
+   #_[:pre (prn-str (take 10 (:teasers state)))]
+   (for [[index teaser] (map-indexed vector (take 10 (:teasers state)))]
+     [:div {:key (hash teaser)
+            :style {:margin-top "20px"}}
+      
+      [:a {:href (str "#/node/" (:nid teaser))
+           :class [:page_list_header]}
+       (:title teaser)]
+      
+      [:div {:class [:page_list_date]
+             :style {:margin-left "10px"
+                     :display "inline"}}
        (cljs-time.format/unparse (cljs-time.format/formatter "dd.MM.YYYY")
                                  (cljs-time.coerce/from-long (* 1000 (long (:created teaser))))) ]
-      [:div {:class [:page_list_header_div] :style {:clear "both"}}
-       [:a {:href (str "#/node/" (:nid teaser)) :class [:page_list_header]}
-        (:title teaser)]
-       [:a {:href (str "#/node/" (:nid teaser))
-            :class [:teaser]}
-        [:div {:dangerouslySetInnerHTML {:__html (:teaser teaser)}}]]]])])
+      
+      [:a {:href (str "#/node/" (:nid teaser))
+           :class [:teaser]}
+       [:div {:dangerouslySetInnerHTML {:__html (:teaser teaser)}}]]])])
 
 (defn node [node]
   [:div
@@ -64,19 +71,64 @@
     (call [:terms]
           (fn [terms]
             (swap! state-atom assoc :terms terms)))
+
     (call [:teasers nil]
           (fn [teasers]
             (swap! state-atom assoc :teasers teasers)))
 
+    (call [:menu]
+          (fn [menu]
+            (swap! state-atom assoc :menu menu)))
+
     state-atom))
+
+(defn leaf-menu [menu]
+  [:li {:key (hash menu)}
+   [:a {:href (if-let [node (:node menu)]
+                (str "#/node/" node)
+                "#")}
+    (:title menu)]])
+
+(defn drop-down-menu [menu]
+  [:li {:class [:dropdown]}
+   [:a {:href (:link menu) :class [:dropdown-toggle] :data-toggle "dropdown" :role "button" :aria-haspopup "true" :aria-expanded "false"}
+    (:title menu) [:span {:class [:caret]}]]
+   [:ul {:class "dropdown-menu"}
+    (for [child (:children menu)]
+      (leaf-menu child))]])
+
+(defn navbar [menus]
+  [:nav {:class "navbar navbar-default"}
+   [:div {:class [:container-fluid]}
+    [:div {:class [:navbar-header]}
+     [:button {:type "button" :class "navbar-toggle collapsed" :data-toggle "collapse"
+               :data-target "#top-navigation" :aria-expanded "false"}
+      [:span {:class [:sr-only]} "toggle navigation"]
+      [:span {:class [:icon-bar]}]
+      [:span {:class [:icon-bar]}]
+      [:span {:class [:icon-bar]}]]
+     [:a {:class [:navbar-brand] :href "#"}
+      "Sirpa Kauppinen"]]
+
+    [:div {:class "collapse navbar-collapse" :id "top-navigation"}
+     [:ul {:class "nav navbar-nav navbar-right"}
+      (for [menu menus]
+        (if (empty? (:children menu))
+          (leaf-menu menu)
+          (drop-down-menu menu)))]]]])
 
 (defn page [state-atom]
   (let [state @state-atom]
     [:div
-     [:a {:href "/#/"} "Etusivu"]
-     (if (:node state)
-       [node (:node state)]
-       [teaser-list state])
+     [navbar (:menu state) #_[{:title "Blogi"
+                               :link "#/blogi"
+                               :children [{:title "Asia 1" :link "#/blogi/1"}
+                                          {:title "Asia 2" :link "#/blogi/1"}]}]]
+     [:div {:style {:margin-left "10px" :margin-right "10px"}}
+      (if (:node state)
+        [node (:node state)]
+        [teaser-list state])]
+     
      #_[:pre "terms:" (pprint/write (:nid state) #_(:terms state)
                                     :stream nil)]
      ]))
@@ -90,8 +142,10 @@
         (aset (.getElementById js/document "desktop") "style" "display" "block"))))
 
 (defn ^:export main []
-  (aset js/document "body" "onresize" choose-layout)
+  
+  #_(aset js/document "body" "onresize" choose-layout)
   (choose-layout)
+  
   #_(println (aset js/document "body" "onresize" choose-layout))
   (reagent/render-component [page state-atom]
                             #_(.-body js/document)

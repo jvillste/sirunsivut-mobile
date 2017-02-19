@@ -42,7 +42,8 @@
                                    ;; :output-dir "../sirunsivut-backend/resources/public/js/compiled/out"
                                    :output-dir "../sirunsivut/sites/all/themes/siru/javascript/compiled/out"
                                    ;; :asset-path "js/compiled/out"
-                                   :asset-path "/sites/all/themes/siru/javascript/compiled/out"
+                                   ;; :asset-path "/sites/all/themes/siru/javascript/compiled/out"
+                                   :asset-path "javascript/compiled/out"
                                    :source-map-timestamp true}}
 
                        {:id "min"

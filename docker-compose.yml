@@ -36,8 +36,8 @@ services:
       volumes:
          - ./sirunsivut:/var/www
 #        - logs:/var/log/supervisor
-      ports:
-        - "8000:80"
+#      ports:
+#        - "8000:80"
 
 #   nginx:
 #     image: wodby/drupal-nginx:1.0.0
